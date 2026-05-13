@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SalonBook – Book Your Beauty, Your Way</title>
+    <meta name="description"
+        content="SalonBook is Pakistan's smartest salon booking app. Browse nearby salons, choose your service, pick your time, and confirm your booking in seconds." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* ──────────────────────────────────────────
+       DESIGN TOKENS
+    ────────────────────────────────────────── */
+        :root {
+            --primary: #963b52;
+            --primary-light: #fbe9f3;
+            --primary-dark: #3f0016;
+            --primary-mid: #b8486a;
+            --bg: #fff7f9;
+            --surface: #ffffff;
+            --muted: #544245;
+            --subtle: #ffd9de;
+            --text: #221920;
+            --chip: #efdee8;
+            --accent: #f0a0b5;
+            --gold: #c9874f;
+
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --radius-xl: 48px;
+
+            --shadow-sm: 0 4px 16px rgba(150, 59, 82, 0.10);
+            --shadow-md: 0 8px 32px rgba(150, 59, 82, 0.18);
+            --shadow-lg: 0 16px 56px rgba(150, 59, 82, 0.25);
+        }
+
+        /* ──────────────────────────────────────────
+       RESET & BASE
+    ────────────────────────────────────────── */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ──────────────────────────────────────────
+       NAV
+    ────────────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            height: 72px;
+            background: rgba(255, 247, 249, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(150, 59, 82, 0.08);
+            transition: box-shadow 0.3s;
+        }
+
+        nav.scrolled {
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .nav-logo span {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-cta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-privacy-nav {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--muted);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--chip);
+            transition: all 0.25s;
+        }
+
+        .btn-privacy-nav:hover {
+            background: var(--chip);
+            color: var(--primary);
+        }
+
+        .btn-download-nav {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #fff;
+            background: var(--primary);
+            padding: 9px 20px;
+            border-radius: 24px;
+            box-shadow: 0 4px 14px rgba(150, 59, 82, 0.35);
+            transition: all 0.25s;
+        }
+
+        .btn-download-nav:hover {
+            background: var(--primary-mid);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(150, 59, 82, 0.45);
+        }
+
+        /* ──────────────────────────────────────────
+       HERO
+    ────────────────────────────────────────── */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            padding-top: 72px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Layered gradient background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 70% 40%, rgba(255, 217, 222, 0.55) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 50% at 10% 80%, rgba(150, 59, 82, 0.12) 0%, transparent 60%),
+                linear-gradient(160deg, #fff7f9 0%, #fbe9f3 50%, #fff0f4 100%);
+            z-index: 0;
+        }
+
+        /* Decorative blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 0;
+            animation: blobFloat 8s ease-in-out infinite alternate;
+        }
+
+        .blob-1 {
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, #ffd9de, #963b52);
+            top: -120px;
+            right: -80px;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, #fbe9f3, #b8486a);
+            bottom: -60px;
+            left: -60px;
+            animation-delay: 3s;
+        }
+
+        .blob-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #f0a0b5, #963b52);
+            top: 40%;
+            left: 40%;
+            animation-delay: 6s;
+        }
+
+        @keyframes blobFloat {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(20px, -30px) scale(1.05);
+            }
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 0;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 580px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-light);
+            border: 1px solid rgba(150, 59, 82, 0.18);
+            color: var(--primary);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 24px;
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease both;
+        }
+
+        .hero-badge span {
+            font-size: 1rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.4rem, 5vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            color: var(--text);
+            margin-bottom: 20px;
+            animation: fadeSlideUp 0.6s 0.1s ease both;
+        }
+
+        .hero-title .highlight {
+            color: var(--primary);
+            position: relative;
+        }
+
+        .hero-title .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #ffd9de, #963b52);
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            color: var(--muted);
+            line-height: 1.75;
+            margin-bottom: 36px;
+            max-width: 480px;
+            animation: fadeSlideUp 0.6s 0.2s ease both;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            animation: fadeSlideUp 0.6s 0.3s ease both;
+        }
+
+        .btn-download-hero {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 800;
+            padding: 16px 36px;
+            border-radius: 50px;
+            box-shadow: 0 8px 30px rgba(150, 59, 82, 0.40);
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-download-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            border-radius: inherit;
+        }
+
+        .btn-download-hero:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 14px 40px rgba(150, 59, 82, 0.50);
+        }
+
+        .btn-download-hero:active {
+            transform: scale(0.98);
+        }
+
+        .btn-download-hero svg {
+            flex-shrink: 0;
+        }
+
+        .hero-stat-row {
+            display: flex;
+            gap: 32px;
+            margin-top: 44px;
+            flex-wrap: wrap;
+            animation: fadeSlideUp 0.6s 0.4s ease both;
+        }
+
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hero-stat strong {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .hero-stat span {
+            font-size: 0.82rem;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        /* Hero phone mockup */
+        .hero-visual {
+            flex-shrink: 0;
+            position: relative;
+            animation: fadeSlideUp 0.7s 0.2s ease both;
+        }
+
+        .phone-wrap {
+            position: relative;
+            width: 280px;
+        }
+
+        .phone-shell {
+            width: 280px;
+            height: 560px;
+            background: linear-gradient(145deg, #2a1218, #3f0016);
+            border-radius: 44px;
+            padding: 12px;
+            box-shadow:
+                0 30px 80px rgba(63, 0, 22, 0.45),
+                0 0 0 1px rgba(255, 255, 255, 0.08),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.04);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(160deg, #fff7f9, #fbe9f3);
+            border-radius: 34px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Screen status bar */
+        .screen-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 16px 6px;
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* App header inside screen */
+        .screen-header {
+            background: var(--primary);
+            padding: 12px 16px 18px;
+            color: #fff;
+        }
+
+        .screen-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .screen-logo {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .screen-logo-img {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        .screen-notif {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+        }
+
+        .screen-greeting {
+            font-size: 9.5px;
+            opacity: 0.85;
+            margin-bottom: 3px;
+        }
+
+        .screen-user {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        /* Search bar in-screen */
+        .screen-search {
+            margin: 10px 12px 0;
+            background: #fff;
+            border-radius: 20px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9px;
+            color: #aaa;
+            transform: translateY(8px);
+        }
+
+        /* Categories inside screen */
+        .screen-cats {
+            display: flex;
+            gap: 8px;
+            padding: 18px 12px 8px;
+            overflow: hidden;
+        }
+
+        .screen-cat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .cat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 17px;
+        }
+
+        .cat-icon.c1 {
+            background: #ffd9de;
+        }
+
+        .cat-icon.c2 {
+            background: #dde8ff;
+        }
+
+        .cat-icon.c3 {
+            background: #d9ffd9;
+        }
+
+        .cat-icon.c4 {
+            background: #fff3d9;
+        }
+
+        .cat-label {
+            font-size: 8px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        /* Salon cards in screen */
+        .screen-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text);
+            padding: 4px 12px;
+        }
+
+        .screen-card {
+            background: #fff;
+            border-radius: 14px;
+            margin: 5px 12px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(150, 59, 82, 0.08);
+        }
+
+        .card-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-name {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .card-sub {
+            font-size: 8px;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .card-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-rating {
+            font-size: 8px;
+            font-weight: 600;
+            color: #c9874f;
+        }
+
+        .card-book {
+            font-size: 8px;
+            font-weight: 700;
+            background: var(--primary);
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 8px;
+        }
+
+        /* Phone decorations */
+        .phone-notch {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: #1a0a0e;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .phone-glow {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(150, 59, 82, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.1);
+            }
+        }
+
+        /* Floating badges around phone */
+        .float-badge {
+            position: absolute;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--text);
+            animation: badgeFloat 4s ease-in-out infinite alternate;
+            white-space: nowrap;
+        }
+
+        .float-badge .badge-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .float-badge-1 {
+            top: 60px;
+            left: -120px;
+            animation-delay: 0s;
+        }
+
+        .float-badge-2 {
+            top: 200px;
+            right: -110px;
+            animation-delay: 1.5s;
+        }
+
+        .float-badge-3 {
+            bottom: 80px;
+            left: -100px;
+            animation-delay: 3s;
+        }
+
+        @keyframes badgeFloat {
+            from {
+                transform: translateY(0px);
+            }
+
+            to {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* ──────────────────────────────────────────
+       FEATURES STRIP
+    ────────────────────────────────────────── */
+        .features-strip {
+            padding: 0 5%;
+            margin-bottom: 100px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feat-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 28px 24px;
+            border: 1px solid rgba(150, 59, 82, 0.08);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+
+        .feat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feat-emoji {
+            font-size: 2rem;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .feat-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .feat-desc {
+            font-size: 0.875rem;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+
+        /* ──────────────────────────────────────────
+       SECTION LABELS
+    ────────────────────────────────────────── */
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            background: var(--primary-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--text);
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .section-sub {
+            font-size: 1rem;
+            color: var(--muted);
+            max-width: 520px;
+            line-height: 1.7;
+        }
+
+        /* ──────────────────────────────────────────
+       HOW IT WORKS
+    ────────────────────────────────────────── */
+        .how-section {
+            padding: 0 5% 100px;
+        }
+
+        .how-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .how-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .how-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+            position: relative;
+        }
+
+        .how-steps::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--subtle), var(--primary), var(--subtle));
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .step-card {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 28px 20px 24px;
+            text-align: center;
+            border: 1px solid rgba(150, 59, 82, 0.08);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .step-num {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 4px 14px rgba(150, 59, 82, 0.35);
+        }
+
+        .step-icon {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .step-desc {
+            font-size: 0.845rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ──────────────────────────────────────────
+       COMPARISON SECTION
+    ────────────────────────────────────────── */
+        .compare-section {
+            padding: 0 5% 100px;
+            background: linear-gradient(160deg, #fff0f4 0%, #fff7f9 100%);
+        }
+
+        .compare-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .compare-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 0;
+            align-items: stretch;
+        }
+
+        .compare-col {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 36px 32px;
+            border: 1px solid rgba(150, 59, 82, 0.10);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .compare-col.salonbook {
+            background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: #fff;
+            box-shadow: var(--shadow-lg);
+            transform: scale(1.03);
+            z-index: 2;
+            position: relative;
+        }
+
+        .compare-col.salonbook::before {
+            content: '✨ Recommended';
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #c9874f, #f4a55a);
+            color: #fff;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 6px 20px;
+            border-radius: 20px;
+            white-space: nowrap;
+            box-shadow: 0 4px 14px rgba(201, 135, 79, 0.4);
+        }
+
+        .compare-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--muted);
+            padding: 0 8px;
+        }
+
+        .vs-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--chip);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .compare-col-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .compare-col.salonbook .compare-col-title {
+            color: #fff;
+        }
+
+        .compare-col:not(.salonbook) .compare-col-title {
+            color: var(--text);
+        }
+
+        .compare-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .compare-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .compare-col:not(.salonbook) .compare-list li {
+            color: var(--muted);
+        }
+
+        .compare-col.salonbook .compare-list li {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .check-icon {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .check-bad {
+            background: #fde8e8;
+            color: #e53e3e;
+        }
+
+        .check-good {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        /* ──────────────────────────────────────────
+       DOWNLOAD CTA SECTION
+    ────────────────────────────────────────── */
+        .download-section {
+            padding: 60px 5% 100px;
+        }
+
+        .download-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-mid) 100%);
+            border-radius: var(--radius-xl);
+            padding: 64px 48px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .download-inner::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .download-inner::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: -40px;
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .download-emoji {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .download-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-sub {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-download-main {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            font-weight: 900;
+            padding: 18px 44px;
+            border-radius: 50px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+            text-decoration: none;
+        }
+
+        .btn-download-main:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-download-main:active {
+            transform: scale(0.98);
+        }
+
+        .download-note {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.55);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ──────────────────────────────────────────
+       FOOTER
+    ────────────────────────────────────────── */
+        footer {
+            background: var(--primary-dark);
+            color: rgba(255, 255, 255, 0.7);
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo img {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .footer-logo span {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.65);
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .btn-privacy-footer {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 18px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            transition: all 0.25s;
+        }
+
+        .btn-privacy-footer:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: #fff;
+        }
+
+        .footer-copy {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ──────────────────────────────────────────
+       ANIMATIONS
+    ────────────────────────────────────────── */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: all 0.65s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ──────────────────────────────────────────
+       RESPONSIVE
+    ────────────────────────────────────────── */
+        @media (max-width: 900px) {
+            .hero-inner {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 0 60px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-stat-row {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .compare-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .compare-divider {
+                display: none;
+            }
+
+            .compare-col.salonbook {
+                transform: none;
+            }
+
+            .how-steps::before {
+                display: none;
+            }
+
+            .download-inner {
+                padding: 48px 28px;
+            }
+
+            .btn-download-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .compare-col {
+                padding: 28px 20px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .download-inner {
+                border-radius: var(--radius-lg);
+            }
+        }
+
+        @media (max-width: 420px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-download-hero {
+                font-size: 0.95rem;
+                padding: 14px 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ─────────────── NAV ─────────────── -->
+    <nav id="main-nav">
+        <div class="nav-logo">
+            <img src="salonbooklogo.png" alt="SalonBook Logo" onerror="this.style.display='none'" />
+            <span>SalonBook</span>
+        </div>
+        <div class="nav-cta">
+            <a href="privacy.html" class="btn-privacy-nav" id="privacy-nav-btn">Privacy Policy</a>
+            <a href="#download" class="btn-download-nav" id="download-nav-btn">
+                <!-- Android icon -->
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="5" y="2" width="14" height="20" rx="2" />
+                    <line x1="12" y1="18" x2="12" y2="18.01" />
+                </svg>
+                Download APK
+            </a>
+        </div>
+    </nav>
+
+    <!-- ─────────────── HERO ─────────────── -->
+    <section class="hero" id="home">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <div class="hero-inner">
+            <!-- Content -->
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>✨</span>
+                    Pakistan's Smartest Salon Booking App
+                </div>
+
+                <h1 class="hero-title">
+                    Book Your<br />
+                    <span class="highlight">Beauty</span><br />
+                    Your Way
+                </h1>
+
+                <p class="hero-sub">
+                    SalonBook connects you with the best salons nearby. Browse services, pick your time slot, choose
+                    your stylist, and confirm your booking — all in under 60 seconds.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="salonbook-customer.apk" download id="hero-download-btn" class="btn-download-hero">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download APK — Free
+                    </a>
+                </div>
+
+                <div class="hero-stat-row">
+                    <div class="hero-stat">
+                        <strong>500+</strong>
+                        <span>Salons Listed</span>
+                    </div>
+                    <div class="hero-stat">
+                        <strong>10K+</strong>
+                        <span>Happy Customers</span>
+                    </div>
+                    <div class="hero-stat">
+                        <strong>4.9 ★</strong>
+                        <span>Average Rating</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phone Mockup -->
+            <div class="hero-visual">
+                <!-- Floating badges -->
+                <div class="float-badge float-badge-1">
+                    <div class="badge-icon" style="background:#ffd9de;">📅</div>
+                    <div>
+                        <div style="font-size:0.75rem;color:var(--muted);font-weight:500;">Booking</div>
+                        <div>Confirmed! ✅</div>
+                    </div>
+                </div>
+
+                <div class="float-badge float-badge-2">
+                    <div class="badge-icon" style="background:#dde8ff;">⭐</div>
+                    <div>
+                        <div style="font-size:0.75rem;color:var(--muted);font-weight:500;">Rating</div>
+                        <div>4.9 / 5.0</div>
+                    </div>
+                </div>
+
+                <div class="float-badge float-badge-3">
+                    <div class="badge-icon" style="background:#d9ffd9;">🏆</div>
+                    <div>
+                        <div style="font-size:0.75rem;color:var(--muted);font-weight:500;">Top Salon</div>
+                        <div>2 km away</div>
+                    </div>
+                </div>
+
+                <div class="phone-wrap">
+                    <div class="phone-glow"></div>
+                    <div class="phone-shell">
+                        <!-- Notch -->
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <!-- Status bar -->
+                            <div class="screen-status">
+                                <span>9:41</span>
+                                <span>●●● 📶 🔋</span>
+                            </div>
+
+                            <!-- App Header -->
+                            <div class="screen-header">
+                                <div class="screen-header-row">
+                                    <div class="screen-logo">
+                                        <div class="screen-logo-img">💄</div>
+                                        SalonBook
+                                    </div>
+                                    <div class="screen-notif">🔔</div>
+                                </div>
+                                <div class="screen-greeting">Good morning, Ayesha 👋</div>
+                                <div class="screen-user">Find your perfect salon</div>
+                                <div class="screen-search">🔍 Search salons, services...</div>
+                            </div>
+
+                            <!-- Categories -->
+                            <div class="screen-cats">
+                                <div class="screen-cat">
+                                    <div class="cat-icon c1">✂️</div>
+                                    <div class="cat-label">Hair</div>
+                                </div>
+                                <div class="screen-cat">
+                                    <div class="cat-icon c2">💅</div>
+                                    <div class="cat-label">Nails</div>
+                                </div>
+                                <div class="screen-cat">
+                                    <div class="cat-icon c3">✨</div>
+                                    <div class="cat-label">Skin</div>
+                                </div>
+                                <div class="screen-cat">
+                                    <div class="cat-icon c4">🧴</div>
+                                    <div class="cat-label">Spa</div>
+                                </div>
+                            </div>
+
+                            <!-- Salon cards -->
+                            <div class="screen-label">📍 Near You</div>
+
+                            <div class="screen-card">
+                                <div class="card-img" style="background:#ffd9de;">💇‍♀️</div>
+                                <div class="card-info">
+                                    <div class="card-name">Glamour Studio</div>
+                                    <div class="card-sub">Hair • Makeup • 1.2 km</div>
+                                    <div class="card-row">
+                                        <div class="card-rating">★ 4.9</div>
+                                        <div class="card-book">Book Now</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="screen-card">
+                                <div class="card-img" style="background:#dde8ff;">💆‍♀️</div>
+                                <div class="card-info">
+                                    <div class="card-name">Serenity Spa</div>
+                                    <div class="card-sub">Spa • Massage • 2.0 km</div>
+                                    <div class="card-row">
+                                        <div class="card-rating">★ 4.8</div>
+                                        <div class="card-book">Book Now</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────── FEATURES ─────────────── -->
+    <section class="features-strip" id="features">
+        <div class="features-grid">
+            <div class="feat-card reveal">
+                <span class="feat-emoji">🗺️</span>
+                <div class="feat-title">Find Salons Near You</div>
+                <div class="feat-desc">Discover top-rated salons in your area with live location search. Filter by
+                    category — Hair, Nails, Skin, Spa & more.</div>
+            </div>
+            <div class="feat-card reveal">
+                <span class="feat-emoji">📅</span>
+                <div class="feat-title">Real-Time Slot Booking</div>
+                <div class="feat-desc">See available time slots in real-time. No more phone calls — pick your date, time
+                    and preferred stylist instantly.</div>
+            </div>
+            <div class="feat-card reveal">
+                <span class="feat-emoji">🔔</span>
+                <div class="feat-title">Instant Notifications</div>
+                <div class="feat-desc">Receive push notifications when the salon accepts or updates your booking. Stay
+                    informed every step of the way.</div>
+            </div>
+            <div class="feat-card reveal">
+                <span class="feat-emoji">⭐</span>
+                <div class="feat-title">Trusted Reviews</div>
+                <div class="feat-desc">Read real reviews from real customers. Make smarter decisions based on genuine
+                    ratings and service feedback.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────── HOW IT WORKS ─────────────── -->
+    <section class="how-section" id="how">
+        <div class="how-inner">
+            <div class="how-header reveal">
+                <div class="section-label">✦ How It Works</div>
+                <h2 class="section-title">Book in 5 Simple Steps</h2>
+                <!-- <p class="section-sub">Getting your perfect salon appointment has never been easier. Here's the
+                    SalonBook flow:</p> -->
+            </div>
+
+            <div class="how-steps">
+                <div class="step-card reveal">
+                    <div class="step-num">1</div>
+                    <span class="step-icon">🏪</span>
+                    <div class="step-title">Browse Salons</div>
+                    <div class="step-desc">Explore salons near you or search by name, category or location.</div>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-num">2</div>
+                    <span class="step-icon">✂️</span>
+                    <div class="step-title">Choose a Service</div>
+                    <div class="step-desc">Pick from a full menu — price, duration & stylist info shown clearly.</div>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-num">3</div>
+                    <span class="step-icon">📅</span>
+                    <div class="step-title">Select Date & Time</div>
+                    <div class="step-desc">View real-time availability and pick the slot that suits you best.</div>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-num">4</div>
+                    <span class="step-icon">👩‍🎨</span>
+                    <div class="step-title">Pick Your Stylist</div>
+                    <div class="step-desc">Choose a specific stylist you like or let the salon assign one.</div>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-num">5</div>
+                    <span class="step-icon">✅</span>
+                    <div class="step-title">Confirm & Relax</div>
+                    <div class="step-desc">Review your booking summary and confirm. You'll get notified instantly.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────── COMPARISON ─────────────── -->
+    <section class="compare-section" id="compare">
+        <div class="compare-inner">
+            <div class="compare-header reveal">
+                <div class="section-label">✦ Why SalonBook?</div>
+                <h2 class="section-title">Old Way vs. The SalonBook Way</h2>
+                <!-- <p class="section-sub">Say goodbye to phone tags, long waits, and scheduling chaos. Here's how we do it
+                    better:</p> -->
+            </div>
+
+            <div class="compare-grid reveal">
+                <!-- Traditional -->
+                <div class="compare-col">
+                    <div class="compare-col-title">
+                        <span>📞</span> Traditional Booking
+                    </div>
+                    <ul class="compare-list">
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            Call the salon and wait on hold — sometimes for minutes
+                        </li>
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            No idea which slots are actually available
+                        </li>
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            Can't choose your preferred stylist easily
+                        </li>
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            No service prices shown upfront — surprises at checkout
+                        </li>
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            Reminders? You're on your own
+                        </li>
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            Cancellations are a hassle — another call required
+                        </li>
+                        <li>
+                            <div class="check-icon check-bad">✕</div>
+                            No reviews or ratings to judge quality beforehand
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- VS divider -->
+                <div class="compare-divider">
+                    <div class="vs-circle">VS</div>
+                </div>
+
+                <!-- SalonBook -->
+                <div class="compare-col salonbook">
+                    <div class="compare-col-title">
+                        <span>💄</span> SalonBook
+                    </div>
+                    <ul class="compare-list">
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            Book in seconds from your phone — no calls needed
+                        </li>
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            See live availability in real-time, green to go
+                        </li>
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            Choose your favourite stylist directly in-app
+                        </li>
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            Full price list and service durations displayed clearly
+                        </li>
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            Automatic push notifications for confirmations & reminders
+                        </li>
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            Cancel easily from the Bookings tab
+                        </li>
+                        <li>
+                            <div class="check-icon check-good">✓</div>
+                            Real ratings and reviews to pick the best salon
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─────────────── DOWNLOAD CTA ─────────────── -->
+    <section class="download-section" id="download">
+        <div class="download-inner reveal">
+            <span class="download-emoji">📲</span>
+            <h2 class="download-title">Ready to Glow Up?</h2>
+            <p class="download-sub">
+                Download the SalonBook APK now — completely free for Android.<br />
+                Your next perfect salon appointment is just a tap away.
+            </p>
+            <a href="salonbook-customer.apk" download id="main-download-btn" class="btn-download-main">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download SalonBook APK
+            </a>
+            <div class="download-note">⚡ Free · Android · No sign-up required to download</div>
+        </div>
+    </section>
+
+    <!-- ─────────────── FOOTER ─────────────── -->
+    <footer id="privacy">
+        <div class="footer-inner">
+            <div class="footer-logo">
+                <img src="salonbooklogo.png" alt="SalonBook" onerror="this.style.display='none'" />
+                <span>SalonBook</span>
+            </div>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#how">How It Works</a>
+                <a href="#compare">Why SalonBook</a>
+                <a href="#download">Download</a>
+            </div>
+
+            <a href="privacy.html" class="btn-privacy-footer" id="privacy-btn">
+                🔒 Privacy Policy
+            </a>
+
+            <!-- Privacy Policy is on privacy.html -->
+            <div id="privacy-content" style="
+        max-width:720px;
+        margin:0 auto 28px;
+        background:rgba(255,255,255,0.05);
+        border:1px solid rgba(255,255,255,0.12);
+        border-radius:20px;
+        padding:36px 36px;
+        text-align:left;
+        font-size:0.875rem;
+        line-height:1.8;
+        color:rgba(255,255,255,0.75);
+        display:none;
+      ">
+                <h3 style="color:#fff;font-size:1.15rem;font-weight:900;margin-bottom:6px;letter-spacing:-0.3px;">
+                    🔒 Privacy Policy — SalonBook
+                </h3>
+                <p style="font-size:0.78rem;color:rgba(255,255,255,0.45);margin-bottom:24px;">
+                    At SalonBook, we value your privacy. This Privacy Policy explains how we collect, use, and protect
+                    your information when you use our mobile application.
+                </p>
+
+                <!-- Section 1 -->
+                <p
+                    style="color:#ffd9de;font-size:0.82rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                    1. Information We Collect
+                </p>
+                <p style="margin-bottom:8px;">
+                    To provide a seamless experience, we collect the following types of information:
+                </p>
+                <p style="margin-bottom:8px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Personal Information:</strong> When you sign up using
+                    Google Sign-In, we collect your name, email address, and profile picture.
+                </p>
+                <p style="margin-bottom:24px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Location Data:</strong> We request access to your
+                    precise and approximate location (<code
+                        style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-size:0.78rem;">ACCESS_FINE_LOCATION</code>
+                    and <code
+                        style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-size:0.78rem;">ACCESS_COARSE_LOCATION</code>).
+                </p>
+
+                <!-- Section 2 -->
+                <p
+                    style="color:#ffd9de;font-size:0.82rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                    2. Why We Request Permissions
+                </p>
+                <p style="margin-bottom:8px;">We only ask for permissions that are essential for the app's
+                    functionality:</p>
+                <p style="margin-bottom:8px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Location Permissions:</strong> We use your location
+                    data specifically to find and display salons near your current area and to provide accurate
+                    navigation to your chosen salon.
+                </p>
+                <p style="margin-bottom:8px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Notifications:</strong> We use push notifications to
+                    send you appointment reminders, booking confirmations, and important service updates.
+                </p>
+                <p style="margin-bottom:24px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Google Sign-In:</strong> We use this to provide a
+                    secure and quick way for you to manage your profile and booking history without needing to remember
+                    a
+                    new password.
+                </p>
+
+                <!-- Section 3 -->
+                <p
+                    style="color:#ffd9de;font-size:0.82rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                    3. Data Usage and Third Parties
+                </p>
+                <p style="margin-bottom:8px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Google Services:</strong> Our app uses Google Maps API
+                    to display salon locations and Google Sign-In for authentication. These services may collect data as
+                    governed by Google's own privacy policies.
+                </p>
+                <p style="margin-bottom:24px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    <strong style="color:rgba(255,255,255,0.9);">Data Security:</strong> We implement
+                    industry-standard security measures to protect your personal information from unauthorized access.
+                </p>
+
+                <!-- Section 4 -->
+                <p
+                    style="color:#ffd9de;font-size:0.82rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                    4. User Rights and Data Retention
+                </p>
+                <p style="margin-bottom:8px;">You have the right to:</p>
+                <p style="margin-bottom:8px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    Revoke location permissions at any time through your device settings.
+                </p>
+                <p style="margin-bottom:24px;padding-left:14px;border-left:2px solid rgba(255,217,222,0.3);">
+                    Request the deletion of your account and personal data by contacting our support team.
+                </p>
+
+                <!-- Section 5 -->
+                <p
+                    style="color:#ffd9de;font-size:0.82rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">
+                    5. Contact Us
+                </p>
+                <p>
+                    If you have any questions regarding this Privacy Policy, please contact us at:<br />
+                    <strong style="color:rgba(255,255,255,0.9);">Email:</strong>
+                    <a href="mailto:najafikram85@gmail.com"
+                        style="color:#ffd9de;text-decoration:underline;">najafikram85@gmail.com</a>
+                </p>
+            </div>
+
+            <div class="footer-copy">
+                &copy; 2026 SalonBook Pakistan. All rights reserved. Made with 💄 for beauty lovers.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ─────────────── SCRIPTS ─────────────── -->
+    <script>
+        // Sticky nav shadow on scroll
+        const nav = document.getElementById('main-nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 10);
+        });
+
+        // Scroll reveal
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
+                }
+            });
+        }, { threshold: 0.12 });
+        revealEls.forEach(el => observer.observe(el));
+
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href').slice(1);
+                const target = document.getElementById(targetId);
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
